@@ -28,6 +28,6 @@ body {
 
 .planet {
   flex: 1;
-  background: url("Image/Earth\ map.jpg") no-repeat center;
+  background: url("Image/Earth_Low_End.jpg") no-repeat center;
   background-size: cover;
 }
