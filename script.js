@@ -4,7 +4,7 @@ const planetWrapper = document.querySelector(".planet-wrapper");
 // Variables for scrolling logic
 let position = 0; // Initial scroll position
 const scrollSpeed = 2; // Speed of scrolling in pixels per frame
-const containerWidth = 300; // Width of the planet-container
+const containerWidth = 350; // Width of the planet-container
 
 // Event listener for arrow key presses
 window.addEventListener("keydown", (event) => {
