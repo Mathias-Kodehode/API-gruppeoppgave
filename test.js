@@ -16,30 +16,28 @@ document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 
-// Camera setup
 const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   1,
   1000
 );
-// Closer camera position
+
 camera.position.set(0, 5, 10);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 2;
-controls.maxDistance = 3; // Allow more distance for larger model
-controls.minPolarAngle = 0.1; // Allow close-to-horizontal views
+controls.maxDistance = 3;
+controls.minPolarAngle = 0.1;
 controls.maxPolarAngle = Math.PI - 0.1;
 controls.autoRotate = false;
-controls.target.set(0, 0, 0); // Center on the planet
+controls.target.set(0, 0, 0);
 controls.update();
 
-// Lighting: Sunlight (Directional Light)
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2); // Change to neutral white color
-directionalLight.position.set(10, 10, 10); // Simulating sunlight angle
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.position.set(10, 10, 10);
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.width = 1024;
 directionalLight.shadow.mapSize.height = 1024;
@@ -47,23 +45,18 @@ directionalLight.shadow.camera.near = 1;
 directionalLight.shadow.camera.far = 50;
 scene.add(directionalLight);
 
-// Add subtle ambient light with a cool tint (slightly bluish)
-const ambientLight = new THREE.AmbientLight(0xffffff, 2); // Slightly blue ambient light
+const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
-// Load and scale the planet model
 const loader = new GLTFLoader().setPath("3d_model/earth/");
 loader.load(
   "scene.gltf",
   (gltf) => {
-    console.log("Model loaded successfully:", gltf);
     const mesh = gltf.scene;
 
-    // Scale the planet
-    mesh.scale.set(5, 5, 5); // Increase size by scaling
-    mesh.position.set(0, 0, 0); // Ensure planet is centered
+    mesh.scale.set(5, 5, 5);
+    mesh.position.set(0, 0, 0);
 
-    // Add shadows
     mesh.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
@@ -85,6 +78,28 @@ loader.load(
   }
 );
 
+let iss;
+const issLoader = new GLTFLoader().setPath("3d_model/iss/");
+issLoader.load(
+  "iss_scene.gltf",
+  (gltf) => {
+    iss = gltf.scene;
+    iss.scale.set(1, 1, 1);
+    iss.position.set(0, 10, 0);
+    scene.add(iss);
+  },
+  (xhr) => {
+    console.log(
+      xhr.lengthComputable
+        ? `Loading progress: ${(xhr.loaded / xhr.total) * 100}%`
+        : "Progress: Unable to compute"
+    );
+  },
+  (error) => {
+    console.error("Error loading ISS model:", error);
+  }
+);
+
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -94,6 +109,18 @@ window.addEventListener("resize", () => {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
+
+  if (iss) {
+    const time = Date.now() * 0.001;
+    const radius = 10;
+    const speed = 0.1;
+
+    iss.position.x = Math.cos(time * speed) * radius;
+    iss.position.z = Math.sin(time * speed) * radius;
+
+    iss.lookAt(0, 0, 0);
+  }
+
   renderer.render(scene, camera);
 }
 
