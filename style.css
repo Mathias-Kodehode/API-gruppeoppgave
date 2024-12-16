@@ -1,0 +1,37 @@
+/* General body styling */
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Planet container styling */
+.planet-container {
+  position: relative;
+  width: 300px; /* Diameter of the planet */
+  height: 300px;
+  overflow: hidden;
+  border-radius: 50%; /* Circular shape */
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Wrapper for the three planet images */
+.planet-wrapper {
+  position: absolute;
+  top: 0;
+  left: -100%; /* Start with the left duplicate visible */
+  width: 300%; /* 3x the width of the container (left, center, right) */
+  height: 100%;
+  display: flex;
+}
+
+/* Individual planet sections */
+.planet {
+  flex: 1; /* Each segment takes 1/3 of the wrapper width */
+  background: url("Image/Earth\ map.jpg") no-repeat center;
+  background-size: cover;
+}
