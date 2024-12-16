@@ -6,6 +6,9 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("Image/Earth\ map.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 h1 {
@@ -69,12 +72,6 @@ li a:visited {
   width: 350%;
   height: 100%;
   display: flex;
-}
-
-.planet {
-  flex: 1;
-  background: url("Image/Earth\ map.jpg") no-repeat center;
-  background-size: cover;
 }
 
 /* IDs (Identifiers) */
