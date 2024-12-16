@@ -6,7 +6,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000);
+renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 renderer.shadowMap.enabled = true;
@@ -54,8 +54,8 @@ loader.load(
   (gltf) => {
     const mesh = gltf.scene;
 
-    mesh.scale.set(5, 5, 5);
-    mesh.position.set(0, 0, 0);
+    mesh.scale.set(3, 3, 3);
+    mesh.position.set(0, 0.5, 0);
 
     mesh.traverse((child) => {
       if (child.isMesh) {
