@@ -50,7 +50,7 @@ const loader = new GLTFLoader().setPath("3d_model/earth/");
 loader.load("scene.gltf", (gltf) => {
   earth = gltf.scene;
   earth.scale.set(3, 3, 3);
-  earth.position.set(0, 0.5, 0);
+  earth.position.set(0, 0.2, 0);
 
   earth.traverse((child) => {
     if (child.isMesh) {
