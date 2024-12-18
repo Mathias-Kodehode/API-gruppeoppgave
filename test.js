@@ -32,7 +32,7 @@ controls.minDistance = 3;
 controls.maxDistance = 3;
 controls.minPolarAngle = 0.1;
 controls.maxPolarAngle = Math.PI - 0.1;
-controls.autoRotate = false;
+controls.autoRotate = true;
 controls.autoRotateSpeed = -0.5;
 controls.target.set(0, 0, 0);
 controls.update();
@@ -88,14 +88,24 @@ function latLonToCartesian(lat, lon, radius) {
   return { x, y, z };
 }
 
-// Fetch ISS Position from API
+// Fetch ISS Position from the new API
 async function fetchISSPosition() {
   try {
-    const response = await fetch("http://api.open-notify.org/iss-now.json");
+    const response = await fetch(
+      "https://api.wheretheiss.at/v1/satellites/25544"
+    );
     const data = await response.json();
 
-    const latitude = parseFloat(data.iss_position.latitude);
-    const longitude = parseFloat(data.iss_position.longitude);
+    const latitude = parseFloat(data.latitude);
+    const longitude = parseFloat(data.longitude);
+
+    // Update the UI with the new latitude and longitude
+    document.getElementById(
+      "latitude"
+    ).textContent = `Latitude: ${latitude.toFixed(2)}`;
+    document.getElementById(
+      "longitude"
+    ).textContent = `Longitude: ${longitude.toFixed(2)}`;
 
     return { latitude, longitude };
   } catch (error) {
@@ -111,7 +121,7 @@ async function updateISSPosition() {
     const { x, y, z } = latLonToCartesian(
       position.latitude,
       position.longitude,
-      1 // Adjusted radius for closer proximity to the Earth
+      0.7 // Adjusted radius for closer proximity to the Earth
     );
     iss.position.set(x, y, z);
     iss.lookAt(0, 0, 0);
