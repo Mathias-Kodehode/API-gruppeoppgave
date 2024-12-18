@@ -6,10 +6,10 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("Image/Earth_Low_End.jpg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  scroll-behavior: smooth; /* Enable smooth scrolling */
 }
 
 h1 {
@@ -43,6 +43,11 @@ nav li {
   background-color: black;
   color: #fff;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+nav li:hover {
+  background-color: #555; /* Change color on hover */
 }
 
 li a {
@@ -54,8 +59,6 @@ li a:visited {
   color: #fff;
   text-decoration: none;
 }
-
-/* Classes */
 
 .planet-container {
   position: relative;
@@ -81,7 +84,37 @@ li a:visited {
   background-size: cover;
 }
 
-/* IDs (Identifiers) */
 #bodyEarth {
   background-image: url("Image/space.jpg");
+}
+
+#map {
+  height: 80vh;
+  width: 100%;
+}
+
+header {
+  background-color: #333;
+  padding: 10px;
+}
+
+header nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+header nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
