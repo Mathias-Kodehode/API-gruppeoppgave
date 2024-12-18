@@ -72,6 +72,10 @@ li a:visited {
   text-decoration: none;
 }
 
+nav li:hover {
+  background-color: #555; /* Change color on hover */
+}
+
 /* Planet Container */
 .planet-container {
   position: relative;
@@ -101,7 +105,7 @@ li a:visited {
 /* ISS Marker */
 .iss-marker {
   position: absolute;
-  color: white;
+  color: black;
   font-size: 12px;
   text-align: center;
   transform: translate(-50%, -50%);

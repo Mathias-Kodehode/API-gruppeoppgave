@@ -33,7 +33,7 @@ controls.maxDistance = 3;
 controls.minPolarAngle = 0.1;
 controls.maxPolarAngle = Math.PI - 0.1;
 controls.autoRotate = true;
-controls.autoRotateSpeed = -0.5;
+controls.autoRotateSpeed = 0.5;
 controls.target.set(0, 0, 0);
 controls.update();
 
@@ -45,30 +45,49 @@ scene.add(directionalLight);
 const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
+// Earth Model
 let earth;
+const earthGroup = new THREE.Group(); // Group for the Earth model
+scene.add(earthGroup);
+
 const loader = new GLTFLoader().setPath("3d_model/earth/");
-loader.load("scene.gltf", (gltf) => {
-  earth = gltf.scene;
-  earth.scale.set(3, 3, 3);
-  earth.position.set(0, 0.2, 0);
+loader.load(
+  "scene.gltf",
+  (gltf) => {
+    earth = gltf.scene;
 
-  earth.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
-  });
+    const box = new THREE.Box3().setFromObject(earth);
+    const center = box.getCenter(new THREE.Vector3());
 
-  scene.add(earth);
-});
+    earth.position.set(-center.x, -center.y, -center.z);
+    earth.scale.set(3, 3, 3);
 
+    earth.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
+    earthGroup.add(earth);
+  },
+  undefined,
+  (error) => console.error("Error loading Earth model:", error)
+);
+
+// ISS Model
 let iss;
 const issLoader = new GLTFLoader().setPath("3d_model/iss/");
-issLoader.load("iss_scene.gltf", (gltf) => {
-  iss = gltf.scene;
-  iss.scale.set(3, 3, 3);
-  scene.add(iss);
-});
+issLoader.load(
+  "iss_scene.gltf",
+  (gltf) => {
+    iss = gltf.scene;
+    iss.scale.set(3, 3, 3);
+    scene.add(iss);
+  },
+  undefined,
+  (error) => console.error("Error loading ISS model:", error)
+);
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -88,7 +107,7 @@ function latLonToCartesian(lat, lon, radius) {
   return { x, y, z };
 }
 
-// Fetch ISS Position from the new API
+// Fetch ISS Position from the API
 async function fetchISSPosition() {
   try {
     const response = await fetch(
@@ -99,7 +118,6 @@ async function fetchISSPosition() {
     const latitude = parseFloat(data.latitude);
     const longitude = parseFloat(data.longitude);
 
-    // Update the UI with the new latitude and longitude
     document.getElementById(
       "latitude"
     ).textContent = `Latitude: ${latitude.toFixed(2)}`;
@@ -121,22 +139,53 @@ async function updateISSPosition() {
     const { x, y, z } = latLonToCartesian(
       position.latitude,
       position.longitude,
-      0.7 // Adjusted radius for closer proximity to the Earth
+      0.8
     );
     iss.position.set(x, y, z);
     iss.lookAt(0, 0, 0);
   }
 }
 
+let animationsEnabled = true;
+
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
 
+  if (animationsEnabled) {
+    earthGroup.rotation.y += 0.001;
+    controls.autoRotate = true;
+  } else {
+    controls.autoRotate = false;
+  }
+
+  controls.update();
   renderer.render(scene, camera);
 }
 
-animate();
+// Add button for toggling animations
+const button = document.createElement("button");
+button.id = "stop-animation-button";
+button.textContent = "Toggle Animation";
+button.style.position = "absolute";
+button.style.top = "10px";
+button.style.left = "10px";
+button.style.padding = "10px 15px";
+button.style.fontSize = "16px";
+button.style.backgroundColor = "black";
+button.style.color = "#fff";
+button.style.border = "1px solid white";
+button.style.cursor = "pointer";
+button.style.zIndex = "9999";
+button.style.borderRadius = "5px";
+button.style.display = "flex";
+button.style.alignItems = "center";
+document.body.appendChild(button);
 
-// Periodically Update ISS Position
-setInterval(updateISSPosition, 5000); // Update every 5 seconds
+// Toggle animation state
+button.addEventListener("click", () => {
+  animationsEnabled = !animationsEnabled;
+});
+
+animate();
+setInterval(updateISSPosition, 5000);
