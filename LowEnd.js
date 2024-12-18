@@ -68,10 +68,8 @@ async function updateISSOnPlanets() {
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") {
     position -= scrollSpeed;
-    console.log(position);
   } else if (event.key === "ArrowLeft") {
     position += scrollSpeed;
-    console.log(position);
   }
 
   if (position <= -containerWidth) {
