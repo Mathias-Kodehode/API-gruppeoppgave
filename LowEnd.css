@@ -1,3 +1,4 @@
+/* General Body Styling */
 body {
   margin: 0;
   background-image: url(Image/space.jpg);
@@ -11,6 +12,7 @@ body {
   align-items: center;
 }
 
+/* Header Styling */
 header {
   background-image: linear-gradient(black, rgba(255, 255, 255, 0));
   top: 0;
@@ -33,6 +35,7 @@ footer {
   align-items: center;
 }
 
+/* Navigation Styling */
 nav {
   display: flex;
   justify-content: center;
@@ -69,6 +72,7 @@ li a:visited {
   text-decoration: none;
 }
 
+/* Planet Container */
 .planet-container {
   position: relative;
   width: 300px;
@@ -91,4 +95,25 @@ li a:visited {
   flex: 1;
   background: url("Image/Earth_Low_End.jpg") no-repeat center;
   background-size: cover;
+  position: relative;
+}
+
+/* ISS Marker */
+.iss-marker {
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Ensure it's above the planet */
+}
+
+.iss-marker::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  margin: 0 auto;
 }
