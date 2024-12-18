@@ -48,6 +48,10 @@ li a:visited {
   text-decoration: none;
 }
 
+nav li:hover {
+  background-color: #555; /* Change color on hover */
+}
+
 /* ISS Location Box */
 #iss-location-box {
   position: absolute;
