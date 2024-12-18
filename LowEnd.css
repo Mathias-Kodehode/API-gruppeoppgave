@@ -1,16 +1,72 @@
 body {
   margin: 0;
-
   background-image: url(Image/space.jpg);
   background-size: cover;
-
   overflow: hidden;
   background-color: black;
+  height: 100vh;
+  background-image: url(Image/space.gif);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-image: url(Image/space.gif);
+}
+
+header {
+  background-image: linear-gradient(black, rgba(255, 255, 255, 0));
+  top: 0;
+  width: 100%;
+  height: 30%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer {
+  background-image: linear-gradient(rgba(255, 255, 255, 0), black);
+  bottom: 0;
+  width: 100%;
+  height: 30%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  margin: 10px 10px;
+  padding: 10px 15px;
+  border: 1px solid black;
+  background-color: black;
+  color: #fff;
+  cursor: pointer;
+}
+
+li a {
+  text-decoration: none;
+  color: #fff;
+}
+
+li a:visited {
+  color: #fff;
+  text-decoration: none;
 }
 
 .planet-container {
