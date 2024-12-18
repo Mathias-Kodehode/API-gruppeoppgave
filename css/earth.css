@@ -68,3 +68,12 @@ li a:visited {
 #iss-location-box p {
   margin: 5px 0;
 }
+
+#controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+}
