@@ -32,7 +32,8 @@ controls.minDistance = 2;
 controls.maxDistance = 3;
 controls.minPolarAngle = 0.1;
 controls.maxPolarAngle = Math.PI - 0.1;
-controls.autoRotate = false;
+controls.autoRotate = true;
+controls.autoRotateSpeed = -0.5; // Adjust the speed of rotation (default is 2.0)
 controls.target.set(0, 0, 0);
 controls.update();
 
@@ -55,7 +56,7 @@ loader.load(
     const mesh = gltf.scene;
 
     mesh.scale.set(3, 3, 3);
-    mesh.position.set(0, 0, 0);
+    mesh.position.set(0, 0.5, 0);
 
     mesh.traverse((child) => {
       if (child.isMesh) {
