@@ -28,78 +28,47 @@ camera.position.set(0, 5, 10);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 2;
+controls.minDistance = 3;
 controls.maxDistance = 3;
 controls.minPolarAngle = 0.1;
 controls.maxPolarAngle = Math.PI - 0.1;
-controls.autoRotate = true;
-controls.autoRotateSpeed = -0.5; // Adjust the speed of rotation (default is 2.0)
+controls.autoRotate = false;
+controls.autoRotateSpeed = -0.5;
 controls.target.set(0, 0, 0);
 controls.update();
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 directionalLight.position.set(10, 10, 10);
 directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.width = 1024;
-directionalLight.shadow.mapSize.height = 1024;
-directionalLight.shadow.camera.near = 1;
-directionalLight.shadow.camera.far = 50;
 scene.add(directionalLight);
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
+let earth;
 const loader = new GLTFLoader().setPath("3d_model/earth/");
-loader.load(
-  "scene.gltf",
-  (gltf) => {
-    const mesh = gltf.scene;
+loader.load("scene.gltf", (gltf) => {
+  earth = gltf.scene;
+  earth.scale.set(3, 3, 3);
+  earth.position.set(0, 0.5, 0);
 
-    mesh.scale.set(3, 3, 3);
-    mesh.position.set(0, 0.5, 0);
+  earth.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
 
-    mesh.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-
-    scene.add(mesh);
-  },
-  (xhr) => {
-    console.log(
-      xhr.lengthComputable
-        ? `Loading progress: ${(xhr.loaded / xhr.total) * 100}%`
-        : "Progress: Unable to compute"
-    );
-  },
-  (error) => {
-    console.error("Error loading model:", error);
-  }
-);
+  scene.add(earth);
+});
 
 let iss;
 const issLoader = new GLTFLoader().setPath("3d_model/iss/");
-issLoader.load(
-  "iss_scene.gltf",
-  (gltf) => {
-    iss = gltf.scene;
-    iss.scale.set(1, 1, 1);
-    iss.position.set(0, 10, 0);
-    scene.add(iss);
-  },
-  (xhr) => {
-    console.log(
-      xhr.lengthComputable
-        ? `Loading progress: ${(xhr.loaded / xhr.total) * 100}%`
-        : "Progress: Unable to compute"
-    );
-  },
-  (error) => {
-    console.error("Error loading ISS model:", error);
-  }
-);
+issLoader.load("iss_scene.gltf", (gltf) => {
+  iss = gltf.scene;
+  iss.scale.set(3, 3, 3);
+  scene.add(iss);
+});
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -107,22 +76,57 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// Convert Lat/Lon to 3D Cartesian coordinates
+function latLonToCartesian(lat, lon, radius) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = radius * Math.sin(phi) * Math.sin(theta);
+  const y = radius * Math.cos(phi);
+
+  return { x, y, z };
+}
+
+// Fetch ISS Position from API
+async function fetchISSPosition() {
+  try {
+    const response = await fetch("http://api.open-notify.org/iss-now.json");
+    const data = await response.json();
+
+    const latitude = parseFloat(data.iss_position.latitude);
+    const longitude = parseFloat(data.iss_position.longitude);
+
+    return { latitude, longitude };
+  } catch (error) {
+    console.error("Error fetching ISS position:", error);
+    return null;
+  }
+}
+
+// Update ISS Position on the Earth Model
+async function updateISSPosition() {
+  const position = await fetchISSPosition();
+  if (position && iss) {
+    const { x, y, z } = latLonToCartesian(
+      position.latitude,
+      position.longitude,
+      1 // Adjusted radius for closer proximity to the Earth
+    );
+    iss.position.set(x, y, z);
+    iss.lookAt(0, 0, 0);
+  }
+}
+
+// Animation Loop
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
-
-  if (iss) {
-    const time = Date.now() * 0.001;
-    const radius = 10;
-    const speed = 0.1;
-
-    iss.position.x = Math.cos(time * speed) * radius;
-    iss.position.z = Math.sin(time * speed) * radius;
-
-    iss.lookAt(0, 0, 0);
-  }
 
   renderer.render(scene, camera);
 }
 
 animate();
+
+// Periodically Update ISS Position
+setInterval(updateISSPosition, 5000); // Update every 5 seconds
