@@ -55,7 +55,7 @@ loader.load(
     const mesh = gltf.scene;
 
     mesh.scale.set(3, 3, 3);
-    mesh.position.set(0, 0.5, 0);
+    mesh.position.set(0, 0, 0);
 
     mesh.traverse((child) => {
       if (child.isMesh) {
