@@ -6,9 +6,10 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("Image/Earth\ map.jpg");
+  background-image: url("Image/Earth_Low_End.jpg");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
+  background-position: center;
 }
 
 h1 {
