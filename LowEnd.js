@@ -7,6 +7,9 @@ let position = 0;
 const scrollSpeed = 2;
 const containerWidth = 350;
 
+let fetchInterval = 5000; // Start with a 5-second interval
+let backoffTimeout = null;
+
 // Update planet scrolling logic
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") {
@@ -32,13 +35,28 @@ const fetchISSData = async () => {
     const response = await fetch(
       "https://api.wheretheiss.at/v1/satellites/25544"
     );
+
+    if (response.status === 429) {
+      console.warn("Rate limit reached. Pausing requests temporarily...");
+      backoff(); // Trigger backoff
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
     const data = await response.json();
 
     const { latitude, longitude } = data;
 
+    if (latitude === undefined || longitude === undefined) {
+      throw new Error("Missing latitude or longitude in API response");
+    }
+
     // Update the latitude and longitude display
-    latitudeElement.textContent = latitude.toFixed(2);
-    longitudeElement.textContent = longitude.toFixed(2);
+    latitudeElement.textContent = `Latitude: ${latitude.toFixed(2)}`;
+    longitudeElement.textContent = `Longitude: ${longitude.toFixed(2)}`;
 
     // Calculate normalized coordinates
     const normalizedLat = (latitude + 90) / 180; // Normalize latitude (-90 to 90) to 0-1
@@ -66,10 +84,33 @@ const fetchISSData = async () => {
       marker.style.left = `${x}px`;
       marker.style.top = `${y}px`;
     });
+
+    // Reset backoff interval on successful fetch
+    resetBackoff();
   } catch (error) {
     console.error("Error fetching ISS data:", error);
   }
 };
 
-// Fetch ISS data every second
-setInterval(fetchISSData, 1000);
+// Backoff mechanism for rate-limiting
+const backoff = () => {
+  if (backoffTimeout) {
+    clearTimeout(backoffTimeout);
+  }
+
+  fetchInterval = Math.min(fetchInterval * 2, 60000); // Double the interval up to 60 seconds
+  console.log(`Increasing fetch interval to ${fetchInterval / 1000} seconds.`);
+  backoffTimeout = setTimeout(() => fetchISSData(), fetchInterval);
+};
+
+// Reset backoff to the default interval
+const resetBackoff = () => {
+  if (backoffTimeout) {
+    clearTimeout(backoffTimeout);
+  }
+
+  fetchInterval = 5000; // Reset to 5 seconds
+};
+
+// Fetch ISS data every interval
+setInterval(fetchISSData, fetchInterval);
