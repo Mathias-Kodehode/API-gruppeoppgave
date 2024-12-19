@@ -120,10 +120,10 @@ async function fetchISSPosition() {
 
     document.getElementById(
       "latitude"
-    ).textContent = Latitude: ${latitude.toFixed(2)};
+    ).textContent = `Latitude: ${latitude.toFixed(2)}`;
     document.getElementById(
       "longitude"
-    ).textContent = Longitude: ${longitude.toFixed(2)};
+    ).textContent = `Longitude: ${longitude.toFixed(2)}`;
 
     return { latitude, longitude };
   } catch (error) {
