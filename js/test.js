@@ -49,7 +49,9 @@ scene.add(ambientLight);
 const earthGroup = new THREE.Group();
 scene.add(earthGroup);
 
-const earthLoader = new GLTFLoader().setPath("./3d_model/earth/");
+const earthLoader = new GLTFLoader().setPath(
+  "https://mathias-kodehode.github.io/API-gruppeoppgave/3d_model/earth/"
+);
 earthLoader.load(
   "scene.gltf",
   (gltf) => {
@@ -75,7 +77,9 @@ earthLoader.load(
 );
 
 // ISS Model
-const issLoader = new GLTFLoader().setPath("./3d_model/iss/");
+const issLoader = new GLTFLoader().setPath(
+  "https://mathias-kodehode.github.io/API-gruppeoppgave/3d_model/iss/"
+);
 issLoader.load(
   "iss_scene.gltf",
   (gltf) => {
@@ -144,35 +148,36 @@ async function updateISSPosition(iss) {
   }
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  earthGroup.rotation.y += 0.001;
-  controls.update();
-  renderer.render(scene, camera);
-}
+let animationsEnabled = true;
 
-// Add button for toggling animations
 const button = document.createElement("button");
 button.id = "stop-animation-button";
 button.textContent = "Toggle Animation";
-button.style.position = "absolute";
-button.style.top = "30px";
-button.style.left = "30px";
-button.style.padding = "10px 15px";
-button.style.fontSize = "16px";
-button.style.backgroundColor = "black";
-button.style.color = "#fff";
-button.style.border = "1px solid white";
-button.style.cursor = "pointer";
-button.style.zIndex = "9999";
-button.style.borderRadius = "5px";
-button.style.display = "flex";
-button.style.alignItems = "center";
+button.style.cssText = `
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 9999;
+`;
 document.body.appendChild(button);
 
-// Toggle animation state
 button.addEventListener("click", () => {
   animationsEnabled = !animationsEnabled;
+  controls.autoRotate = animationsEnabled;
 });
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (animationsEnabled) earthGroup.rotation.y += 0.001;
+  controls.update();
+  renderer.render(scene, camera);
+}
 
 animate();
