@@ -42,11 +42,10 @@ async function updateISSOnPlanets() {
   const { latitude, longitude } = issData;
 
   // Normalize latitude and longitude
-  const normalizedLat = (latitude + 90) / 180; // Normalize latitude (-90 to 90) to 0-1
-  const normalizedLng = (longitude + 180) / 360; // Normalize longitude (-180 to 180) to 0-1
+  const normalizedLat = (latitude + 90) / 180;
+  const normalizedLng = (longitude + 180) / 360;
 
   planets.forEach((planet) => {
-    // Ensure each planet has a marker
     let marker = planet.querySelector(".iss-marker");
     if (!marker) {
       marker = document.createElement("div");
@@ -95,7 +94,7 @@ const fetchISSData = async () => {
 
     if (response.status === 429) {
       console.warn("Rate limit reached. Pausing requests temporarily...");
-      backoff(); // Trigger backoff
+      backoff();
       return;
     }
 
@@ -116,8 +115,8 @@ const fetchISSData = async () => {
     longitudeElement.textContent = `Longitude: ${longitude.toFixed(2)}`;
 
     // Calculate normalized coordinates
-    const normalizedLat = (latitude + 90) / 180; // Normalize latitude (-90 to 90) to 0-1
-    const normalizedLng = (longitude + 180) / 360; // Normalize longitude (-180 to 180) to 0-1
+    const normalizedLat = (latitude + 90) / 180;
+    const normalizedLng = (longitude + 180) / 360;
 
     planets.forEach((planet) => {
       // Ensure each planet has a marker
@@ -155,7 +154,7 @@ const backoff = () => {
     clearTimeout(backoffTimeout);
   }
 
-  fetchInterval = Math.min(fetchInterval * 2, 60000); // Double the interval up to 60 seconds
+  fetchInterval = Math.min(fetchInterval * 2, 60000);
   console.log(`Increasing fetch interval to ${fetchInterval / 1000} seconds.`);
   backoffTimeout = setTimeout(() => fetchISSData(), fetchInterval);
 };
@@ -166,7 +165,7 @@ const resetBackoff = () => {
     clearTimeout(backoffTimeout);
   }
 
-  fetchInterval = 5000; // Reset to 5 seconds
+  fetchInterval = 5000;
 };
 
 // Fetch ISS data every interval
