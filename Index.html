@@ -3,28 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scrollable Planet</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
+    <title>3D Model Earth</title>
+    <link rel="stylesheet" href="css/earth.css" />
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@v0.163.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@v0.163.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
     <header>
       <nav>
         <ul>
-          <a href="earth.html"> <li>Earth</li></a>
-          <a href="Index.html"> <li>Map</li></a>
+          <a href="index.html"> <li>Earth</li></a>
+          <a href="map.html"> <li>Map</li></a>
           <a href="LowEnd.html"> <li>Potato Mode</li></a>
         </ul>
       </nav>
+      <div id="iss-location-box">
+        <h3>ISS Location</h3>
+        <p id="latitude">Latitude: --</p>
+        <p id="longitude">Longitude: --</p>
+      </div>
     </header>
 
-    <!-- Map container -->
-    <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script type="module" src="test.js"></script>
   </body>
 </html>

@@ -10,6 +10,8 @@ body {
   background-size: contain;
   background-position: center;
   scroll-behavior: smooth; /* Enable smooth scrolling */
+  background-image: url("Image/space.gif");
+  background-size: cover;
 }
 
 h1 {
@@ -50,16 +52,15 @@ nav li:hover {
   background-color: #555; /* Change color on hover */
 }
 
-li a {
+a {
   text-decoration: none;
   color: #fff;
 }
 
-li a:visited {
+a:visited {
   color: #fff;
   text-decoration: none;
 }
-
 .planet-container {
   position: relative;
   width: 300px;
@@ -101,6 +102,7 @@ header {
 header nav ul {
   list-style: none;
   padding: 0;
+  margin-top: 20px;
 }
 
 header nav ul li {
@@ -111,10 +113,4 @@ header nav ul li {
 header nav ul li a {
   color: white;
   text-decoration: none;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
 }
