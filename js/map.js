@@ -18,8 +18,26 @@ const locationPinIcon = L.divIcon({
   iconAnchor: [20, 40], // Adjust anchor point to the bottom center of the pin
 });
 
-// Add the ISS marker to the map
-let issMarker = L.marker([0, 0], { icon: locationPinIcon }).addTo(map);
+// Declare the marker but don't add it yet
+let issMarker;
+
+// Add a popup to the marker that will show location on click
+const popup = L.popup();
+
+// Function to fetch the country name based on coordinates
+async function getCountryFromCoordinates(latitude, longitude) {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+    );
+    const data = await response.json();
+    const country = data.address.country || "Unknown"; // Get country from the response
+    return country;
+  } catch (error) {
+    console.error("Error fetching country:", error);
+    return "Unknown";
+  }
+}
 
 // Fetch ISS position and update the marker
 async function updateISSPosition() {
@@ -31,11 +49,31 @@ async function updateISSPosition() {
 
     const { latitude, longitude } = data;
 
+    // If the marker doesn't exist, create it
+    if (!issMarker) {
+      issMarker = L.marker([latitude, longitude], {
+        icon: locationPinIcon,
+      }).addTo(map);
+      issMarker.bindPopup("Click to see ISS location!");
+    }
+
     // Update the marker position
     issMarker.setLatLng([latitude, longitude]);
 
     // Center the map on the ISS
     map.setView([latitude, longitude], map.getZoom());
+
+    // Get the country from the coordinates
+    const country = await getCountryFromCoordinates(latitude, longitude);
+
+    // Update the popup content with latitude, longitude, and country
+    issMarker
+      .bindPopup(
+        `ISS Location: <br>Latitude: ${latitude.toFixed(
+          2
+        )}° <br>Longitude: ${longitude.toFixed(2)}° <br>Country: ${country}`
+      )
+      .openOn(map);
   } catch (error) {
     console.error("Error updating ISS position:", error);
   }
