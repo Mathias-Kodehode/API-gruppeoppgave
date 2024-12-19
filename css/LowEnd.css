@@ -4,7 +4,7 @@ body {
   overflow: hidden;
   background-color: black;
   height: 100vh;
-  background-image: url(Image/space.gif);
+  background-image: url(../Image/space.gif);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,7 +96,7 @@ a:visited {
 
 .planet {
   flex: 1;
-  background: url("Image/Earth_Low_End.jpg") no-repeat center;
+  background: url("../Image/Earth_Low_End.jpg") no-repeat center;
   background-size: cover;
   position: relative;
 }
