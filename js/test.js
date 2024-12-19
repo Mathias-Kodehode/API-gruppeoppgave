@@ -50,7 +50,7 @@ let earth;
 const earthGroup = new THREE.Group(); // Group for the Earth model
 scene.add(earthGroup);
 
-const loader = new GLTFLoader().setPath("3d_model/earth/");
+const loader = new GLTFLoader().setPath("../3d_model/earth/");
 loader.load(
   "scene.gltf",
   (gltf) => {
@@ -77,7 +77,7 @@ loader.load(
 
 // ISS Model
 let iss;
-const issLoader = new GLTFLoader().setPath("3d_model/ISS/");
+const issLoader = new GLTFLoader().setPath("../3d_model/iss/");
 issLoader.load(
   "iss_scene.gltf",
   (gltf) => {

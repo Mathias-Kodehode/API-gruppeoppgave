@@ -6,15 +6,8 @@
     <title>3D Model Earth</title>
     <link rel="stylesheet" href="css/earth.css" />
 
-    <!-- Import Map -->
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
-          "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/"
-        }
-      }
-    </script>
+    <!-- Main Script -->
+    <script defer type="module" src="js/test.js"></script>
 
     <!-- ES Module Shims -->
     <script
@@ -22,8 +15,15 @@
       src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
     ></script>
 
-    <!-- Main Script -->
-    <script defer type="module" src="js/test.js"></script>
+    <!-- Import Map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@v0.163.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@v0.163.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body>
     <header>
