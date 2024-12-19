@@ -38,12 +38,12 @@ nav li {
   cursor: pointer;
 }
 
-li a {
+a {
   text-decoration: none;
   color: #fff;
 }
 
-li a:visited {
+a:visited {
   color: #fff;
   text-decoration: none;
 }

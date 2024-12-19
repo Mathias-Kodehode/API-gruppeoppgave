@@ -52,16 +52,15 @@ nav li:hover {
   background-color: #555; /* Change color on hover */
 }
 
-li a {
+a {
   text-decoration: none;
   color: #fff;
 }
 
-li a:visited {
+a:visited {
   color: #fff;
   text-decoration: none;
 }
-
 .planet-container {
   position: relative;
   width: 300px;
