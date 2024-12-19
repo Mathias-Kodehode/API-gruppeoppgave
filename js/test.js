@@ -77,7 +77,7 @@ loader.load(
 
 // ISS Model
 let iss;
-const issLoader = new GLTFLoader().setPath("3d_model/iss/");
+const issLoader = new GLTFLoader().setPath("3d_model/ISS/");
 issLoader.load(
   "iss_scene.gltf",
   (gltf) => {
