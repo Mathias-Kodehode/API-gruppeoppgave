@@ -1,0 +1,32 @@
+Mandag:
+
+grei start på dagen, vi opprettet både figma fil og GitHub repository, alle var raske inn på figma å bynte med idemyldring. bryan kom med mange gode forslag.
+vi fikk utviklet ett førsteutkast veldig fort.
+
+jeg fikk lagt inn 3d modeller i prosjektet, Gabriel lagde en basic "demo"
+
+jeg har fått 3d modellen til å funke på ei nettside.
+
+bryan fikk lagd framsiden, å la til ett par gode knapper. la til bedre bakgrunn også
+3d planet funker
+Gabriel har polert "potet" versjonen av 3d planeten.
+
+
+Tirsdag:
+denne dagen ble hjemmekontor, så vi tok tiden til litt bugfixing og polering. lite å melde fra.
+
+
+Onsdag:
+
+vi har endelig fått 3d modellen til å oppføre seg.
+vi har koblet opp nesten alt mot API og endpoints.
+det ble også en del bugfixing og diverse.
+fant 3d modellen av ISS stasjonen å posisjonerte den greit nokk. litt feil scale, men oh well.
+
+Torsdag:
+siste finpuss og bugfixing.
+bryan ordna filstrukturen vår, å la til API på kartet.
+
+vi lastet opp nettsiden til GitHub pages, dessverre problem med 3d modellen av romstasjonen.
+
+Gabriel har lagd ett "duck hunt" spill til siden vår.
