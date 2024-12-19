@@ -46,16 +46,15 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 2);
 scene.add(ambientLight);
 
 // Earth Model
-const earthGroup = new THREE.Group();
+let earth;
+const earthGroup = new THREE.Group(); // Group for the Earth model
 scene.add(earthGroup);
 
-const earthLoader = new GLTFLoader().setPath(
-  "https://mathias-kodehode.github.io/API-gruppeoppgave/3d_model/earth/"
-);
-earthLoader.load(
+const loader = new GLTFLoader().setPath("3d_model/earth/");
+loader.load(
   "scene.gltf",
   (gltf) => {
-    const earth = gltf.scene;
+    earth = gltf.scene;
 
     const box = new THREE.Box3().setFromObject(earth);
     const center = box.getCenter(new THREE.Vector3());
@@ -77,18 +76,14 @@ earthLoader.load(
 );
 
 // ISS Model
-const issLoader = new GLTFLoader().setPath(
-  "https://mathias-kodehode.github.io/API-gruppeoppgave/3d_model/iss/"
-);
+let iss;
+const issLoader = new GLTFLoader().setPath("3d_model/iss/");
 issLoader.load(
   "iss_scene.gltf",
   (gltf) => {
-    const iss = gltf.scene;
+    iss = gltf.scene;
     iss.scale.set(3, 3, 3);
     scene.add(iss);
-
-    // Attach ISS position updater
-    setInterval(() => updateISSPosition(iss), 5000);
   },
   undefined,
   (error) => console.error("Error loading ISS model:", error)
@@ -120,14 +115,17 @@ async function fetchISSPosition() {
     );
     const data = await response.json();
 
+    const latitude = parseFloat(data.latitude);
+    const longitude = parseFloat(data.longitude);
+
     document.getElementById(
       "latitude"
-    ).textContent = `Latitude: ${data.latitude.toFixed(2)}`;
+    ).textContent = Latitude: ${latitude.toFixed(2)};
     document.getElementById(
       "longitude"
-    ).textContent = `Longitude: ${data.longitude.toFixed(2)}`;
+    ).textContent = Longitude: ${longitude.toFixed(2)};
 
-    return { latitude: data.latitude, longitude: data.longitude };
+    return { latitude, longitude };
   } catch (error) {
     console.error("Error fetching ISS position:", error);
     return null;
@@ -135,9 +133,9 @@ async function fetchISSPosition() {
 }
 
 // Update ISS Position on the Earth Model
-async function updateISSPosition(iss) {
+async function updateISSPosition() {
   const position = await fetchISSPosition();
-  if (position) {
+  if (position && iss) {
     const { x, y, z } = latLonToCartesian(
       position.latitude,
       position.longitude,
@@ -150,34 +148,44 @@ async function updateISSPosition(iss) {
 
 let animationsEnabled = true;
 
-const button = document.createElement("button");
-button.id = "stop-animation-button";
-button.textContent = "Toggle Animation";
-button.style.cssText = `
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 9999;
-`;
-document.body.appendChild(button);
-
-button.addEventListener("click", () => {
-  animationsEnabled = !animationsEnabled;
-  controls.autoRotate = animationsEnabled;
-});
-
+// Animation Loop
 function animate() {
   requestAnimationFrame(animate);
-  if (animationsEnabled) earthGroup.rotation.y += 0.001;
+
+  if (animationsEnabled) {
+    earthGroup.rotation.y += 0.001;
+    controls.autoRotate = true;
+  } else {
+    controls.autoRotate = false;
+  }
+
   controls.update();
   renderer.render(scene, camera);
 }
 
+// Add button for toggling animations
+const button = document.createElement("button");
+button.id = "stop-animation-button";
+button.textContent = "Toggle Animation";
+button.style.position = "absolute";
+button.style.top = "30px";
+button.style.left = "30px";
+button.style.padding = "10px 15px";
+button.style.fontSize = "16px";
+button.style.backgroundColor = "black";
+button.style.color = "#fff";
+button.style.border = "1px solid white";
+button.style.cursor = "pointer";
+button.style.zIndex = "9999";
+button.style.borderRadius = "5px";
+button.style.display = "flex";
+button.style.alignItems = "center";
+document.body.appendChild(button);
+
+// Toggle animation state
+button.addEventListener("click", () => {
+  animationsEnabled = !animationsEnabled;
+});
+
 animate();
+setInterval(updateISSPosition, 5000);
