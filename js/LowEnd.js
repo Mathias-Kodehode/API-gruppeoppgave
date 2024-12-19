@@ -70,7 +70,6 @@ async function updateISSOnPlanets() {
 }
 
 // Handle horizontal scrolling with arrow keys
-
 window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") {
     position -= scrollSpeed;
