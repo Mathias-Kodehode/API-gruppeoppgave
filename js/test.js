@@ -151,4 +151,28 @@ function animate() {
   renderer.render(scene, camera);
 }
 
+// Add button for toggling animations
+const button = document.createElement("button");
+button.id = "stop-animation-button";
+button.textContent = "Toggle Animation";
+button.style.position = "absolute";
+button.style.top = "30px";
+button.style.left = "30px";
+button.style.padding = "10px 15px";
+button.style.fontSize = "16px";
+button.style.backgroundColor = "black";
+button.style.color = "#fff";
+button.style.border = "1px solid white";
+button.style.cursor = "pointer";
+button.style.zIndex = "9999";
+button.style.borderRadius = "5px";
+button.style.display = "flex";
+button.style.alignItems = "center";
+document.body.appendChild(button);
+
+// Toggle animation state
+button.addEventListener("click", () => {
+  animationsEnabled = !animationsEnabled;
+});
+
 animate();
